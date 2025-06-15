@@ -1,6 +1,7 @@
 {
 	"name": "@superfleb/vue-vector-dot",
-	"private": true,
+	"private": false,
+	"license": "MIT",
 	"version": "0.0.1",
 	"scripts": {
 		"dev": "vite",
