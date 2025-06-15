@@ -41,11 +41,10 @@ const ns = new RandomNamespace();
 	<p>
 		The <code>&lt;VectorDot&gt;</code> component includes X and Y numeric inputs and a widget to allow
 		click-and-drag or 2-dimensional
-		keyboard-based setting. The widget takes on the currentColor (Change color: <input type="color"
-																						   @input="colorChange"/>) and
-		can has min/max/step
-		and zoom options.
+		keyboard-based setting. The widget takes on the currentColor (Change color: <input type="color" @input="colorChange"/>)
+		and has min/max/stepand zoom options.
 	</p>
+	<p>For the code and more information, <a href="https://github.com/SuperFLEB/vue-vector-dot">see the repository.</a></p>
 	<div class="panels">
 		<div>
 			<div class="inputForm" :style="colorStyle">
