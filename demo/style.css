@@ -1,0 +1,19 @@
+:root, html, body {
+	margin: 0;
+	padding: 0;
+	background-color: #fff;
+	text-size-adjust: none;
+	-moz-text-size-adjust: none;
+	-webkit-text-size-adjust: none;
+}
+
+body {
+	margin: 1em;
+	font: 16px "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body, #app {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
