@@ -61,7 +61,7 @@ const ns = new RandomNamespace();
 				<label :for="ns.id('shadow')">Blur X/Y</label>
 				<div>
 					<VectorDot class="vdBlur" name="blur" :id="ns.id('blur')" :x="positions.blur[0]"
-							   :y="positions.blur[1]" yUp :resolution="0.01" :step="0.01" :min="0" @change="onChange"/>
+							   :y="positions.blur[1]" yUp :resolution="0.01" :step="0.01" :min="0" hard-limits @change="onChange"/>
 				</div>
 			</div>
 		</div>
