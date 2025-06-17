@@ -7,7 +7,6 @@ async function dragWidgetBy(component, page, x: number, y: number) {
 	const start: [number, number] = [box.x + box.width / 2, box.y + box.height / 2];
 	await page.mouse.move(...start);
 	await page.mouse.down();
-	await page.mouse.move(start[0] + x / 2, start[1] + y / 2);
 	await page.mouse.move(start[0] + x, start[1] + y);
 	await page.mouse.up();
 }
@@ -84,7 +83,7 @@ test.describe("Typein updates value", async () => {
 	}
 });
 
-test("Typein does not allow invalid values", async ({mount}) => {
+test("Typein does not allow non-numeric values", async ({mount}) => {
 	const harness = await mount(VectorDotTestHarness, {props: {x: 0, y: 0}});
 	const component = await harness.locator(".vectorDot").nth(0);
 	const x = await component.locator("input[type=number]").nth(0);
@@ -101,7 +100,7 @@ test("Typein does not allow invalid values", async ({mount}) => {
 	await expect(harness.locator(".y-value")).toContainText(/^(200|0)$/);
 });
 
-test.describe("Keyboard moves value", async () => {
+test.describe("Arrow keys on widget changes the value", async () => {
 	const zooms = [0.1, 1, 10];
 	const directions: [string, number, number][] = [["ArrowDown", 0, 1], ["ArrowUp", 0, -1], ["ArrowLeft", -1, 0], ["ArrowRight", 1, 0]];
 	for (const zoom of zooms) {
@@ -121,4 +120,94 @@ test.describe("Keyboard moves value", async () => {
 			});
 		}
 	}
+});
+
+test.describe("Min/Max values with widget input", async () => {
+	const tests: [string, number, 1 | -1, boolean][] = [
+		// [axis, axisIndex]
+		["", 0],
+		["", 1],
+		["X", 0],
+		["Y", 1],
+	]
+		.flatMap(t => [["min" + t[0], t[1], -1], ["max" + t[0], t[1], 1]] as [string, number, 1 | -1][])
+		.flatMap(t => [[...t, false], [...t, true]]);
+
+	for (const testSpec of tests) {
+		const [limitProp, axisIndex, sign, hardLimits] = testSpec;
+		const axisName = "xy"[axisIndex];
+		const limit = 15 + 2 * sign;
+		const arrowKey = ["ArrowUp", "ArrowLeft", "", "ArrowRight", "ArrowDown"][2 + (axisIndex + 1) * sign];
+		test(
+			`${hardLimits ? "Hard" : "Soft"} ${limitProp} of ${limit} respected on ${axisName} drag`,
+			async ({mount, page}) => {
+				const drag: [number, number] = [0, 0];
+				drag[axisIndex] = 4 * sign;
+
+				const harness = await mount(VectorDotTestHarness, {
+					props: {
+						x: 15,
+						y: 15,
+						[limitProp]: limit,
+						hardLimits
+					}
+				});
+				const component = await harness.locator(".vectorDot").nth(0);
+				await dragWidgetBy(component, page, ...drag);
+				await expect(harness.locator(`.${axisName}-value`)).toContainText(limit.toString());
+			});
+		test(
+			`${hardLimits ? "Hard" : "Soft"} ${limitProp} of ${limit} respected on ${axisName} widget ${arrowKey}`,
+			async ({mount, page}) => {
+				const harness = await mount(VectorDotTestHarness, {
+					props: {
+						x: 15,
+						y: 15,
+						[limitProp]: limit,
+						hardLimits
+					}
+				});
+				const component = await harness.locator(".vectorDot").nth(0);
+				const focusItem = await component.locator(".vectorDotWidget[tabindex], .vectorDotWidget > [tabindex]").nth(0);
+				await focusItem.focus();
+				for (let i=0; i<4; i++) {
+					await focusItem.press(arrowKey);
+				}
+				await expect(harness.locator(`.${axisName}-value`)).toContainText(limit.toString());
+			});
+		test(
+			`${hardLimits ? "Hard" : "Soft"} ${limitProp} of ${limit} ${hardLimits ? "is" : "is not"} respected on ${axisName} typein entry`,
+			async ({mount, page}) => {
+				const harness = await mount(VectorDotTestHarness, {
+					props: {
+						x: 15,
+						y: 15,
+						[limitProp]: limit,
+						hardLimits
+					}
+				});
+				const component = await harness.locator(".vectorDot").nth(0);
+				const typein = await component.locator("input[type=number]").nth(axisIndex);
+				await typein.fill((limit + 10 * sign).toString());
+				const expected = hardLimits ? limit.toString() : (limit + 10 * sign).toString();
+				await expect(harness.locator(`.${axisName}-value`)).toContainText(expected);
+			});
+	}
+});
+
+
+test("Overlay appears during drag, changes cursor, and disappears afterward", async ({mount, page}) => {
+	const harness = await mount(VectorDotTestHarness, {props: {x: 0, y: 0}});
+	const component = await harness.locator(".vectorDot").nth(0);
+	const widget = await component.locator(".vectorDotWidget");
+	const box = await widget.boundingBox();
+	const start: [number, number] = [box.x + box.width / 2, box.y + box.height / 2];
+	await page.mouse.move(...start);
+	await page.mouse.down();
+	await page.mouse.move(start[0] + 1, start[1] + 1);
+	const overlay = await page.locator("body > .vectorDotDragOverlay");
+	await expect(overlay).toBeAttached();
+	await expect(overlay).toHaveCSS("cursor", "move");
+	await page.mouse.up();
+	await expect(page.locator("body > .vectorDotDragOverlay")).not.toBeAttached();
 });

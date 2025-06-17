@@ -37,7 +37,7 @@ export default class DragHandler {
 		const [x, y] = deltaStart;
 		const compass = [Math.abs(x / y) < 0.5 ? 0 : Math.sign(x), Math.abs(y / x) < 0.5 ? 0 : Math.sign(y)] as [-1 | 0 | 1, -1 | 0 | 1];
 
-		const pos = {
+		return {
 			start: [...this.#startClientPosition],
 			current: [...this.#currentClientPosition],
 			last,
@@ -47,8 +47,6 @@ export default class DragHandler {
 			ended: this.#ended,
 			aborted: this.#aborted,
 		} as Position;
-		console.dir("POSITION", pos.deltaStart);
-		return pos;
 	}
 
 	onStart(_: MouseEvent, __: Position) {

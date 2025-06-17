@@ -61,15 +61,13 @@ let abortController: AbortController;
 
 const joystick = ref<[number, number]>([0, 0]);
 const delta = ref<[number, number]>([0, 0]);
-
-let cursorWas: string;
+const inDrag = ref<boolean>(false);
 
 onMounted(() => {
 	abortController = new AbortController();
 	const handler = new DragHandler(svgControllerRef.value!, abortController.signal);
 	handler.onStart = () => {
-		cursorWas = document.documentElement.style.cursor;
-		document.documentElement.style.cursor = "move";
+		inDrag.value = true;
 	};
 	handler.onMove = (_: MouseEvent, p: Position) => {
 		delta.value = p.deltaStart;
@@ -77,8 +75,8 @@ onMounted(() => {
 		emitDelta(p.deltaLast);
 	};
 	handler.onEnd = () => {
+		inDrag.value = false;
 		joystick.value = [0, 0];
-		document.documentElement.style.cursor = cursorWas || "";
 	};
 });
 
@@ -175,6 +173,9 @@ const ns = new RandomNamespace();
 
 <template>
 	<div class="vectorDot">
+		<Teleport v-if="inDrag" to="body">
+			<div class="vectorDotDragOverlay"></div>
+		</Teleport>
 		<div class="typein">
 			<label>X <input ref="inputX" type="number" :value="props.x" step="1" @input="entry" :id="props.id"/></label>
 			<label>Y <input ref="inputY" type="number" :value="props.y" step="1" @input="entry"/></label>
@@ -184,7 +185,7 @@ const ns = new RandomNamespace();
 				 class="svgController" ref="svgController">
 				<defs>
 					<filter :id="ns.id('lens')">
-						<feImage :xlink:href="lensMap" result="lensMap"/>
+						<feImage :href="lensMap" result="lensMap"/>
 						<feDisplacementMap in="SourceGraphic" in2="lensMap" scale="20" xChannelSelector="R"
 										   yChannelSelector="G" color-interpolation-filters="sRGB" result="ball"/>
 
@@ -303,5 +304,11 @@ const ns = new RandomNamespace();
 	input[type=number] {
 		width: 4em;
 	}
+}
+
+.vectorDotDragOverlay {
+	position: fixed;
+	inset: 0;
+	cursor: move;
 }
 </style>
