@@ -89,7 +89,7 @@ const ns = new RandomNamespace();
 .previewPane {
 	overflow: hidden;
 	min-height: 60vh;
-	border: 1px solid #000;
+	border: 1px solid currentColor;
 }
 
 .inputForm {

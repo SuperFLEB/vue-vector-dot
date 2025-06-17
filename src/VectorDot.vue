@@ -78,7 +78,7 @@ onMounted(() => {
 	};
 	handler.onEnd = () => {
 		joystick.value = [0, 0];
-		document.documentElement.style.cursor = cursorWas || '';
+		document.documentElement.style.cursor = cursorWas || "";
 	};
 });
 
@@ -186,13 +186,21 @@ const ns = new RandomNamespace();
 					<filter :id="ns.id('lens')">
 						<feImage :xlink:href="lensMap" result="lensMap"/>
 						<feDisplacementMap in="SourceGraphic" in2="lensMap" scale="20" xChannelSelector="R"
-										   yChannelSelector="G" color-interpolation-filters="sRGB"/>
+										   yChannelSelector="G" color-interpolation-filters="sRGB" result="ball"/>
+
+						<feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blurred"/>
+						<feSpecularLighting in="blurred" surfaceScale="1" specularConstant="1" specularExponent="40"
+											lighting-color="#fff" result="spec">
+							<fePointLight x="-10" y="-10" z="20"></fePointLight>
+						</feSpecularLighting>
+						<feComposite in="ball" in2="spec" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
+
 					</filter>
-					<pattern :id="ns.id('checkerboard')" viewBox="0 0 2 2" width="2" height="2"
+					<pattern :id="ns.id('checkerboard')" class="checkerboard" viewBox="0 0 2 2" width="2" height="2"
 							 patternUnits="objectBoundingBox" :patternTransform="`translate(${props.x} ${props.y})`">
-						<rect width="2" height="2" fill="#ccc"/>
-						<rect width="1" height="1" fill="#666"/>
-						<rect width="1" height="1" x="1" y="1" fill="#666"/>
+						<rect width="2" height="2"/>
+						<rect width="1" height="1"/>
+						<rect width="1" height="1" x="1" y="1"/>
 					</pattern>
 					<radialGradient :id="ns.id('dotGrad')" cx="30%" cy="30%" r="70%">
 						<stop offset="0%" stop-color="#fff"/>
@@ -201,12 +209,8 @@ const ns = new RandomNamespace();
 						<stop offset="100%" stop-color="#444"/>
 					</radialGradient>
 					<path :id="ns.id('point')" d="M 50 0 l 10 20 h -20 z"/>
-					<g class="handleLayers" :id="ns.id('handle')">
-						<circle class="handleChecks" :fill="ns.url('checkerboard')" :filter="ns.url('lens')"
-								style="--patternScale: 0.1;"/>
-						<circle class="handleColor" fill="currentColor"/>
-						<circle class="handleShade" :fill="ns.url('dotGrad')"/>
-					</g>
+					<circle :id="ns.id('handle')" class="handle" :fill="ns.url('checkerboard')" :filter="ns.url('lens')"
+							style="--patternScale: 0.1;"/>
 				</defs>
 
 				<circle class="selectring" cx="50" cy="50" r="40" fill="none"/>
@@ -274,18 +278,19 @@ const ns = new RandomNamespace();
 	fill: currentColor;
 }
 
-.handleLayers > circle {
+.handle {
 	x: 0;
 	y: 0;
 	r: 22px;
 }
 
-.handleColor {
-	mix-blend-mode: color;
+.checkerboard > rect:first-child {
+	filter: invert(0.8) hue-rotate(180deg);
 }
 
-.handleShade {
-	mix-blend-mode: hard-light;
+.checkerboard > rect {
+	color: currentColor;
+	filter: contrast(0.6);
 }
 
 .typein {
