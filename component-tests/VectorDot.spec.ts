@@ -102,7 +102,20 @@ test("Typein does not allow non-numeric values", async ({mount}) => {
 
 test.describe("Arrow keys on widget changes the value", async () => {
 	const zooms = [0.1, 1, 10];
-	const directions: [string, number, number][] = [["ArrowDown", 0, 1], ["ArrowUp", 0, -1], ["ArrowLeft", -1, 0], ["ArrowRight", 1, 0]];
+	const directions: [string, number, number][] = [
+		["ArrowDown", 0, 1],
+		["ArrowUp", 0, -1],
+		["ArrowLeft", -1, 0],
+		["ArrowRight", 1, 0],
+		["Numpad2", 0, 1],
+		["Numpad8", 0, -1],
+		["Numpad4", -1, 0],
+		["Numpad6", 1, 0],
+		["Numpad7", -1, -1],
+		["Numpad9", 1, -1],
+		["Numpad1", -1, 1],
+		["Numpad3", 1, 1]
+	];
 	for (const zoom of zooms) {
 		for (const direction of directions) {
 			test(`Press ${direction[0]} at ${zoom} resolution`, async ({mount}) => {
