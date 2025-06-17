@@ -1,0 +1,9 @@
+{
+	"extends": [
+		"./tsconfig.lib.json"
+	],
+	"compilerOptions": {
+		"rootDir": ".",
+	},
+	"include": ["component-tests/**/*.ts", "component-tests/**/*.vue"]
+}

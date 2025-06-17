@@ -1,42 +1,44 @@
 {
-	"name": "@superfleb/vue-vector-dot",
-	"private": false,
-	"license": "MIT",
-	"version": "0.0.1",
-	"scripts": {
-		"dev": "vite",
-		"build": "vue-tsc --b --noEmit && vite build && vue-tsc -p tsconfig.lib.json --outDir ./dist",
-		"build-demo": "vite build -c vite.build-demo.config.ts"
-	},
-	"exports": {
-		"import": {
-			"types": "./dist/VectorDot.vue.d.ts",
-			"default": "./dist/VectorDot.mjs"
-		}
-	},
-	"files": [
-		"src",
-		"dist",
-		"dist-demo",
-		"README.md",
-		".yarnrc.yml",
-		"package.json"
-	],
-	"dependencies": {
-		"vue": "^3.5.13",
-		"vue-sfc-transformer": "^0.1.11"
-	},
-	"devDependencies": {
-		"@types/node": "^22.13.5",
-		"@vitejs/plugin-vue": "^5.2.3",
-		"@vue/tsconfig": "^0.7.0",
-		"magic-string": "^0.30.17",
-		"sass": "^1.86.3",
-		"tinyglobby": "^0.2.12",
-		"typescript": "~5.7.2",
-		"vite": "^6.3.4",
-		"vite-plugin-lib-inject-css": "^2.2.2",
-		"vue-tsc": "^2.2.0"
-	},
-	"packageManager": "yarn@4.9.2"
+  "name": "@superfleb/vue-vector-dot",
+  "license": "MIT",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --b --noEmit && vite build && vue-tsc -p tsconfig.lib.json --outDir ./dist",
+    "build-demo": "vite build -c vite.build-demo.config.ts",
+    "test-ct": "playwright test -c playwright-ct.config.ts"
+  },
+  "exports": {
+    "import": {
+      "types": "./dist/VectorDot.vue.d.ts",
+      "default": "./dist/VectorDot.mjs"
+    }
+  },
+  "files": [
+    "src",
+    "dist",
+    "dist-demo",
+    "README.md",
+    ".yarnrc.yml",
+    "package.json"
+  ],
+  "dependencies": {
+    "vue": "^3.5.13",
+    "vue-sfc-transformer": "^0.1.11"
+  },
+  "devDependencies": {
+    "@playwright/experimental-ct-vue": "^1.53.0",
+    "@playwright/test": "^1.53.0",
+    "@types/node": "^22.13.5",
+    "@vitejs/plugin-vue": "^5.2.3",
+    "@vue/tsconfig": "^0.7.0",
+    "magic-string": "^0.30.17",
+    "sass": "^1.86.3",
+    "tinyglobby": "^0.2.12",
+    "typescript": "~5.7.2",
+    "vite": "^6.3.4",
+    "vite-plugin-lib-inject-css": "^2.2.2",
+    "vue-tsc": "^2.2.0"
+  },
+  "packageManager": "yarn@4.9.2"
 }

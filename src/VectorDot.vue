@@ -69,13 +69,12 @@ onMounted(() => {
 	const handler = new DragHandler(svgControllerRef.value!, abortController.signal);
 	handler.onStart = () => {
 		cursorWas = document.documentElement.style.cursor;
-		console.log({cursorWas});
 		document.documentElement.style.cursor = "move";
 	};
 	handler.onMove = (_: MouseEvent, p: Position) => {
 		delta.value = p.deltaStart;
 		joystick.value = p.compass;
-		emitDelta(p.deltaLast.map((d: number) => d * props.resolution) as [number, number]);
+		emitDelta(p.deltaLast);
 	};
 	handler.onEnd = () => {
 		joystick.value = [0, 0];
@@ -98,7 +97,7 @@ function fixValue(value: [number, number]): [number, number] {
 }
 
 function emitDelta(delta: [number, number]) {
-	delta = [delta[0] * (props.xLeft ? -1 : 1), delta[1] * (props.yUp ? -1 : 1)];
+	delta = [delta[0] * (props.xLeft ? -1 : 1) * props.resolution, delta[1] * (props.yUp ? -1 : 1) * props.resolution];
 	emitChange(fixValue([props.x + delta[0], props.y + delta[1]]));
 }
 
@@ -191,7 +190,7 @@ const ns = new RandomNamespace();
 					</filter>
 					<pattern :id="ns.id('checkerboard')" viewBox="0 0 2 2" width="2" height="2"
 							 patternUnits="objectBoundingBox" :patternTransform="`translate(${props.x} ${props.y})`">
-						<rect width="2" height="2" fill="#aaa"/>
+						<rect width="2" height="2" fill="#ccc"/>
 						<rect width="1" height="1" fill="#666"/>
 						<rect width="1" height="1" x="1" y="1" fill="#666"/>
 					</pattern>
