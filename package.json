@@ -1,5 +1,6 @@
 {
   "name": "@superfleb/vue-vector-dot",
+  "description": "A Vue component to render an X/Y input with a drag-to-set widget",
   "license": "MIT",
   "version": "0.0.1",
   "scripts": {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {type CSSProperties, ref} from "vue";
+import {type CSSProperties, onMounted, ref, useTemplateRef} from "vue";
 import RandomNamespace from "@/util/randomNamespace.ts";
 import VectorDot from "@/VectorDot.vue";
 import type Eventish from "@t/Eventish.ts";
@@ -26,28 +26,51 @@ function onChange(e: Eventish) {
 	};
 }
 
-const colorStyle = ref<CSSProperties>({});
+const pageStyleRefs = {
+	fgColor: useTemplateRef("fgColor"),
+	bgColor: useTemplateRef("bgColor"),
+	size: useTemplateRef("textSize"),
+};
 
-function colorChange(e: Event) {
-	colorStyle.value = {
-		color: (e.target as HTMLInputElement).value
-	};
+function pageStyleChange() {
+	document.body.style.setProperty("color", pageStyleRefs.fgColor.value!.value);
+	document.body.style.setProperty("background-color", pageStyleRefs.bgColor.value!.value);
+	document.body.style.setProperty("font-size", pageStyleRefs.size.value!.value + "px");
 }
+
+function rgbToHex(rgb: string): string {
+	if (/^#[0-9a-fA-F]{6}$/.test(rgb)) return rgb;
+	const components = rgb.match(/\d+/g);
+	if (!components || components.length < 3) return "#000";
+	const hex = components.map(c => Number(c).toString(16));
+	return "#" + hex.join("");
+}
+
+onMounted(() => {
+	const style = getComputedStyle(document.body);
+	pageStyleRefs.fgColor.value!.value = rgbToHex(style.color);
+	pageStyleRefs.bgColor.value!.value = rgbToHex(style.backgroundColor);
+	pageStyleRefs.size.value!.value = parseFloat(style.fontSize).toString();
+});
 
 const ns = new RandomNamespace();
 </script>
 
 <template>
+	<p>Foreground <input type="color" ref="fgColor" @input="pageStyleChange" />, Background <input type="color" ref="bgColor" @input="pageStyleChange" />, Text Size <input type="number" min="0" max="72" ref="textSize" @input="pageStyleChange" />px</p>
+
+	<h1>&lt;VectorDot&gt; Demo</h1>
+
 	<p>
 		The <code>&lt;VectorDot&gt;</code> component includes X and Y numeric inputs and a widget to allow
-		click-and-drag or 2-dimensional
-		keyboard-based setting. The widget takes on the currentColor (Change color: <input type="color" @input="colorChange"/>)
-		and has min/max/stepand zoom options.
+		click-and-drag or 2-dimensional keyboard-based setting. The widget takes on the currentColor and has
+		min/max/step and zoom options.
 	</p>
+
 	<p>For the code and more information, <a href="https://github.com/SuperFLEB/vue-vector-dot">see the repository.</a></p>
 	<div class="panels">
 		<div>
-			<div class="inputForm" :style="colorStyle">
+			<div class="inputForm">
 				<label :for="ns.id('offset')">Offset</label>
 				<div>
 					<VectorDot class="vdOffset" name="offset" :id="ns.id('offset')" :x="positions.offset[0]"
