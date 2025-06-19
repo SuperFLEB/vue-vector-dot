@@ -10,14 +10,14 @@ if (!(pjPath && pjPath.endsWith("json") && existsSync(pjPath))) {
 	process.exit(1);
 }
 
-const packageJson = JSON.parse(readFileSync(pjPath).toString());
-
 try {
 	execSync("git diff --quiet --exit-code");
 } catch (e) {
 	console.log("Working directory is not clean. Commit before bumping.");
 	process.exit(1);
 }
+
+const packageJson = JSON.parse(readFileSync(pjPath).toString());
 
 let version = /^\d+\.\d+\.\d+$/.test(packageJson.version) ? packageJson.version.split(".").map(v => Number(v)) : [0, 0, 0];
 let bumpPart = ["major", "minor", "patch"].findIndex(p => argv.includes(p));
