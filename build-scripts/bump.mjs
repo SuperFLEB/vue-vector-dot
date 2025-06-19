@@ -31,5 +31,5 @@ packageJson.version = newVersionString;
 writeFileSync(pjPath, JSON.stringify(packageJson, null, 2));
 
 execSync("git add " + pjPath);
-// execSync(`git commit -m"Update package.json version to ${newVersionString}"`);
-// execSync(`git tag "${newVersionString}"`);
+execSync(`git commit -m"Update ${pjPath} version to ${newVersionString}"`);
+execSync(`git tag "${newVersionString}"`);
