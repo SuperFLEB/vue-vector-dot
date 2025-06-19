@@ -2,7 +2,7 @@
   "name": "@superfleb/vue-vector-dot",
   "description": "A Vue component to render an X/Y input with a drag-to-set widget",
   "license": "MIT",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --b --noEmit && vite build && vue-tsc -p tsconfig.lib.json --outDir ./dist",
