@@ -1,23 +1,17 @@
 import {execSync} from "node:child_process";
 import {readFileSync, writeFileSync, existsSync} from "node:fs";
+import isWdClean from "./util/isWdClean.mjs";
+import getPackageJson from "./util/packageJson.mjs";
 
-const pjPath = process.argv[2];
 const argv = process.argv.slice(3);
 
-if (!(pjPath && pjPath.endsWith("json") && existsSync(pjPath))) {
-	console.error("Invalid package.json path specified.");
-	console.error("Usage: node bump.mjs ./path/to/package.json [major|minor|patch]");
-	process.exit(1);
-}
-
-try {
-	execSync("git diff --quiet --exit-code");
-} catch (e) {
+if (!isWdClean()) {
 	console.log("Working directory is not clean. Commit before bumping.");
 	process.exit(1);
 }
 
-const packageJson = JSON.parse(readFileSync(pjPath).toString());
+const pjPath = process.argv[2];
+const packageJson = getPackageJson();
 
 let version = /^\d+\.\d+\.\d+$/.test(packageJson.version) ? packageJson.version.split(".").map(v => Number(v)) : [0, 0, 0];
 let bumpPart = ["major", "minor", "patch"].findIndex(p => argv.includes(p));
