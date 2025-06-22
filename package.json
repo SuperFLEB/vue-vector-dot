@@ -2,7 +2,7 @@
   "name": "@superfleb/vue-vector-dot",
   "description": "A Vue component to render an X/Y input with a drag-to-set widget",
   "license": "MIT",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --b --noEmit && vite build && vue-tsc -p tsconfig.lib.json --outDir ./dist",
@@ -22,14 +22,10 @@
     ".yarnrc.yml",
     "package.json"
   ],
-  "dependencies": {
-    "vue": "^3.5.13",
-    "vue-sfc-transformer": "^0.1.11"
-  },
   "devDependencies": {
-    "@superfleb/bump": "^1.0.1",
     "@playwright/experimental-ct-vue": "^1.53.0",
     "@playwright/test": "^1.53.0",
+    "@superfleb/bump": "^1.0.1",
     "@types/node": "^22.13.5",
     "@vitejs/plugin-vue": "^5.2.3",
     "@vue/tsconfig": "^0.7.0",
@@ -39,7 +35,12 @@
     "typescript": "~5.7.2",
     "vite": "^6.3.4",
     "vite-plugin-lib-inject-css": "^2.2.2",
+    "vue": "^3.5.13",
+    "vue-sfc-transformer": "^0.1.11",
     "vue-tsc": "^2.2.0"
+  },
+  "peerDependencies": {
+    "vue": "*"
   },
   "packageManager": "yarn@4.9.2"
 }

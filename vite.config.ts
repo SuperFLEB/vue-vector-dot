@@ -30,7 +30,8 @@ export default defineConfig(() => (
 		],
 		build: {
 			// assetsInlineLimit: 0,
-			minify: false,
+			minify: true,
+			sourcemap: true,
 			target: "es2020",
 			lib: {
 				entry: entries,
