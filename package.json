@@ -2,7 +2,7 @@
   "name": "@superfleb/vue-vector-dot",
   "description": "A Vue component to render an X/Y input with a drag-to-set widget",
   "license": "MIT",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --b --noEmit && vite build && vue-tsc -p tsconfig.lib.json --outDir ./dist",
@@ -23,11 +23,11 @@
     "package.json"
   ],
   "dependencies": {
-    "@superfleb/bump": "^1.0.1",
     "vue": "^3.5.13",
     "vue-sfc-transformer": "^0.1.11"
   },
   "devDependencies": {
+    "@superfleb/bump": "^1.0.1",
     "@playwright/experimental-ct-vue": "^1.53.0",
     "@playwright/test": "^1.53.0",
     "@types/node": "^22.13.5",
