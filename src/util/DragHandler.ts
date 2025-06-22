@@ -15,8 +15,8 @@ function arraySubtract<T extends number[]>(a: T, b: T): T {
 
 export default class DragHandler {
 	#element: HTMLElement | SVGElement;
-	#endAbortController!: AbortController;
-	#endAbortSignal!: AbortSignal;
+	#endAbortController?: AbortController;
+	#endAbortSignal?: AbortSignal;
 
 	#startClientPosition: [number, number] = [0, 0];
 	#lastClientPosition: [number, number] = [0, 0];
@@ -88,7 +88,7 @@ export default class DragHandler {
 		this.#lastClientPosition = this.#currentClientPosition;
 		this.#currentClientPosition = e ? [e.clientX, e.clientY] : this.#currentClientPosition;
 		this.onEnd(e, this.position);
-		this.#endAbortController.abort();
+		this.#endAbortController?.abort();
 	}
 
 	constructor(element: HTMLElement | SVGElement, signal?: AbortSignal) {

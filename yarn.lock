@@ -712,12 +712,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@superfleb/bump@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@superfleb/bump@npm:1.0.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40superfleb%2Fbump%2F1.0.1%2Fc738c2b92d3a4e9b5f127a8e7e6b3245fbdf107a"
+  bin:
+    bump: dist/bump.js
+    bumpIfRequired: dist/bumpIfRequired.js
+    tag: dist/tag.js
+  checksum: 10c0/d223e57a13c7b64517903fecd2e40813ec7f01dc6d9d0df532326e8fe0d0cf2d969d4963c4f4993101f02a1018037f11128b5b9b696d4906928437e5a35b919e
+  languageName: node
+  linkType: hard
+
 "@superfleb/vue-vector-dot@workspace:.":
   version: 0.0.0-use.local
   resolution: "@superfleb/vue-vector-dot@workspace:."
   dependencies:
     "@playwright/experimental-ct-vue": "npm:^1.53.0"
     "@playwright/test": "npm:^1.53.0"
+    "@superfleb/bump": "npm:^1.0.1"
     "@types/node": "npm:^22.13.5"
     "@vitejs/plugin-vue": "npm:^5.2.3"
     "@vue/tsconfig": "npm:^0.7.0"
